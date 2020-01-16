@@ -13,10 +13,17 @@ class ParametrosController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function __construct()
+    {
+        $this->middleware('jwt', ['except' => ['login']]);
+    }
+
     public function index(Request $request)
     {
+        
         //$parametros = Parametros::all();        
         $parametros = Parametros::get()->where('year',$request['year']);
+            print_r($parametros); 
         return $parametros->toJson(JSON_PRETTY_PRINT);
         /*
         foreach ($parametros as $params) {

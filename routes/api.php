@@ -28,5 +28,9 @@ Route::group([
     'middleware' => 'api',
 ], function ($router) {
     Route::resource('users', 'UserController');
+    Route::resource('parameters', 'ParametrosController');    
+    Route::post('add_parameter', 'ParametrosController@add')->name('add_parameter');
 });
 
+
+//Route::get('parameters', 'ParametrosController@index')->name('parameters');
