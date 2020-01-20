@@ -21,16 +21,12 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
-    Route::resource('users', 'UserController');
 });
 
 Route::group([
-    'middleware' => 'api',
+    'middleware' => ['api']
 ], function ($router) {
     Route::resource('users', 'UserController');
-    Route::resource('parameters', 'ParametrosController');    
+    Route::resource('parameters', 'ParametrosController');
     Route::post('add_parameter', 'ParametrosController@add')->name('add_parameter');
 });
-
-
-//Route::get('parameters', 'ParametrosController@index')->name('parameters');
