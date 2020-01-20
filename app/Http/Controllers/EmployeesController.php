@@ -21,12 +21,13 @@ class EmployeesController extends Controller
         $employee = Employees::create($request['data']);       
         return $employee;
 
-        
-        /* return response()->json([
+        if($employee){
+        return response()->json([
             'employee' => $employee,
             'message' => 'employee created succesfuly'
         ], 201);
-       */
+      
+        }
         
     }
 
