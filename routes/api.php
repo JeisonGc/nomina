@@ -28,8 +28,7 @@ Route::group([
     'middleware' => 'api',
 ], function ($router) {
     Route::resource('users', 'UserController');
-    Route::resource('parameters', 'ParametrosController');    
-    Route::post('add_parameter', 'ParametrosController@add')->name('add_parameter');
+    Route::resource('parameters', 'ParametersController');        
     Route::resource('solidarityFund', 'SolidarityFundController');
     Route::resource('riskClass', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');

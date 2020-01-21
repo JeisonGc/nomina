@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Parametros;
+use App\Parameter;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
-class ParametrosController extends BaseController
+class ParametersController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
@@ -18,25 +18,23 @@ class ParametrosController extends BaseController
         $this->middleware('jwt', ['except' => ['login']]);
     }
 
-    public function index(Request $request)
-    {
-        $nd = getdate();
-        $year = $nd['year'];
-        if(isset($request['year'])&&$request['year']!=''){
-            $year = $request['year'];
-        }    
-        $parametros = Parametros::get()->where('year',$year);            
-        return $parametros->toJson(JSON_PRETTY_PRINT);        
+    public function show($year)
+    {         
+        //echo "year= ".$year; die;
+        $Parameters = Parameter::get()->where('year','=',$year);    
+        return response()->json([
+            'data' => $Parameters,
+            'message' => 'list of resources'
+        ], 200) ;              
     }
 
-    public function add(Request $request)
-    {
-        
+    public function store(Request $request)
+    {        
 
         $datos = $request->all();        
-        $deletedRows = Parametros::where('year', $datos['year'])->delete();
+        $deletedRows = Parameter::where('year', $datos['year'])->delete();
        
-        $parametro = Parametros::create($request->all());
+        $parametro = Parameter::create($request->all());
         
 
         return response()->json([
