@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-/* Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
  */
@@ -22,6 +22,3 @@ Route::get('show', 'EmployeesController@show')->name('show');
 //Route::get('get/{id}', 'EmployeesController@getOne')->name('getOne');
 Route::put('update/{id}', 'EmployeesController@update')->name('update');
 Route::delete('destroy/{id}', 'EmployeesController@destroy')->name('destroy');
-
-Route::resource('Employess', 'EmployessController');
-

@@ -26,35 +26,38 @@ class EmployeesController extends Controller
             'message' => 'employee created succesfuly'
         ], 201);
         }
-
-        }else {
-
-        return response()->json([            
-            'message' => 'enter data'
-        ]);
-
-
-       }
+        }
         
     }   
 
 
-    public function show(){
-
+    public function index(){
        
-        $employee = Employee::all();
-        if (!$employee) {
-            return response()->json([
-                'data' => $employee,
-                'message' => 'no employees to show'
-            ], 404);
-        }else{
+        $employee = Employee::withTrashed()->get();
+        if ($employee) {           
             return response()->json([
                 'data' => $employee,
                 'message' => 'successful listing'
             ], 201);
         }      
-          
+    }
+
+
+    public function show($documentNumber){ 
+        
+       
+        if ($documentNumber) {         
+        $employee =Employee::where('document_Number',(string)$documentNumber)->get(); 
+       
+        if ($employee) {                      
+            return response()->json([
+                'data' => $employee,
+                'message' => 'employee exists'
+                
+            ]);             
+        }  
+        } 
+        
     }
 
 
@@ -62,67 +65,35 @@ class EmployeesController extends Controller
         
         $input = $request->all();
         if ($input) {         
-        $employee =Employee::where('documentNumber',(string)$documentNumber)->first(); 
+        $employee =Employee::where('document_Number',(string)$documentNumber)->first(); 
         $employee->fill($request->all());
         $employee->save();
 
-        if (!$employee) {
-            return response()->json([
-                'data' => $employee,
-                'message' => 'the employee does not exist'
-               
-            ], 404);
-           
-        }else {           
+        if ($employee) {                      
             return response()->json([
                 'data' => $employee,
                 'message' => 'employee successfully updated'
                 
             ]);             
         }  
-        } else {
-
-        return response()->json([            
-            'message' => 'enter data'
-        ]);
-
-
-        }
-        
+        }         
     }
 
 
     public function destroy($documentNumber){
 
         if ($documentNumber) {           
-        $employee =Employee::where('documentNumber',(string)$documentNumber)
-        ->update(['status' => false]);
-                    
-                
-        if (!$employee) {
+        $employee =Employee::where('document_Number',(string)$documentNumber)->first();
+        $employee->delete();       
+                                    
+        if ($employee) {            
             return response()->json([
                 'data' => $employee,
-                'message' => 'the employee does not exist'
-               
-            ], 404);
-           
-        }else {          
-            
-            return response()->json([
-                'data' => $employee,
-                'message' => 'successfully updated'
-               
+                'message' => 'successfully eliminated'               
             ]);
                         
         }
-        }else {
-
-        return response()->json([            
-            'message' => 'enter data'
-        ]);
-
-
-    }
+        }
                       
     }
 

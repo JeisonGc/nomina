@@ -13,8 +13,8 @@ class Employee extends Eloquent
     protected $connection = 'mongodb';
     protected $collection = 'employees';    
     protected $dates = ['deleted_at'];
-    protected $fillable = ['firstName','lastName','documentType','documentNumber','email','cellphone',
-    'date_born','current_contract','contracts','social_security','payment_method','learns','transportAid','status'];
+    protected $fillable = ['first_Name','last_Name','document_Type','document_Number','email','cellphone',
+    'date_born','current_contract','contracts','social_security','payment_method','learns','transport_Aid'];
 
 }
 
