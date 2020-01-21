@@ -13,12 +13,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('me', 'AuthController@me');
 });
- */
-Route::post('store', 'EmployeesController@store')->name('store');
-Route::get('show', 'EmployeesController@show')->name('show');
-//Route::get('get/{id}', 'EmployeesController@getOne')->name('getOne');
-Route::put('update/{id}', 'EmployeesController@update')->name('update');
-Route::delete('destroy/{id}', 'EmployeesController@destroy')->name('destroy');
+Route::group([
+    'middleware' => ['api']
+], function ($router) {
+    Route::resource('users', 'UserController');
+    Route::resource('roles', 'RoleController');
+    Route::resource('parameters', 'ParametrosController');
+    Route::resource('solidarity-fund', 'SolidarityFundController');
+    Route::resource('risk-class', 'RiskClassController');
+    Route::resource('novelties', 'NoveltiesController');
+    Route::resource('employees', 'EmployeesController');
+});
