@@ -20,8 +20,12 @@ class ParametrosController extends BaseController
 
     public function index(Request $request)
     {
-                
-        $parametros = Parametros::get()->where('year',$request['year']);            
+        $nd = getdate();
+        $year = $nd['year'];
+        if(isset($request['year'])&&$request['year']!=''){
+            $year = $request['year'];
+        }    
+        $parametros = Parametros::get()->where('year',$year);            
         return $parametros->toJson(JSON_PRETTY_PRINT);        
     }
 
