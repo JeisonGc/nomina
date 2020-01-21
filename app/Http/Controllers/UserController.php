@@ -38,22 +38,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|unique:users|username',
-            'password' => 'required|min:6',
+            'username' => 'required|unique:users',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $user = new User();
-        $user->username = $request['username'];
-        $user->password = Hash::make($request['password']);
-        $user->role = $request->role;
-        $user->save();
+        $request['password'] = Hash::make($request['password']);
+
+        $user = User::create($request->all());
 
         return response()->json([
-            'user' => $user,
+            'data' => $user,
             'message' => 'resource created'
         ], 201);
     }

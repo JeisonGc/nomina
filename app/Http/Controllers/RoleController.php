@@ -27,15 +27,6 @@ class RoleController extends Controller
         return response()->json($roles, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -53,12 +44,12 @@ class RoleController extends Controller
             return response()->json(['errors' => $errors], 422);
         }
 
-        $role = new Role();
-        $role->name = $request->name;
-        $role->permissions = $request->permissions;
-        $role->save();
+        $role = Role::create($request->all());
 
-        return response()->json(['message' => 'Role created'], 201);
+        return response()->json([
+            'data' => $role,
+            'message' => 'resource created'
+        ], 201);
     }
 
     /**
@@ -73,36 +64,37 @@ class RoleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Role $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param \App\Role $role
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-        //
+        $role = Role::find($id);
+        $role->fill($request->all());
+        $role->save();
+
+        return response()->json([
+            'data' => $role,
+            'message' => 'resource updated'
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Role $role
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+        $role->delete();
+
+        return response()->json([
+            'message' => 'resource deleted'
+        ], 201);
     }
 }
