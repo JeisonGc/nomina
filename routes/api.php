@@ -30,7 +30,8 @@ Route::group([
     Route::resource('users', 'UserController');
     Route::resource('parameters', 'ParametrosController');    
     Route::post('add_parameter', 'ParametrosController@add')->name('add_parameter');
+    Route::resource('solidarityFund', 'SolidarityFundController');
+    Route::resource('riskClass', 'RiskClassController');
+    Route::resource('novelties', 'NoveltiesController');
 });
-
-
 //Route::get('parameters', 'ParametrosController@index')->name('parameters');

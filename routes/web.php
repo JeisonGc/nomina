@@ -18,9 +18,3 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/pmongo', 'PruebaMongo@index')->name('pmongo');
-
-Route::get('/add_parameter', 'ParametrosController@add')->name('add_parameter');
-Route::get('/parameters', 'ParametrosController@index')->name('parameters');
-//Route::get('/create_parametros', 'ParametrosController@create')->name('pmongo');
