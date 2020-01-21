@@ -13,7 +13,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable, SoftDeletes;
 
     protected $connection = 'mongodb';
-    protected $collection = 'users_collection';
+    protected $collection = 'users';
 
     /**
      * The attributes that should be hidden for arrays.

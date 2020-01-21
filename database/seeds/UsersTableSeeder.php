@@ -14,30 +14,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $role = new Role();
-        $role->id = 1;
-        $role->name = 'admin';
-        $role->permissions = ['users'];
-        $role->save();
-
-        $role = new Role();
-        $role->id = 2;
-        $role->name = 'users';
-        $role->permissions = [];
-        $role->save();
-
-
         $user = new User();
-        $user->username = 'admin';
-        $user->password = Hash::make('admin');
-        $user->role_id = 1;
-        $user->save();
-        $user->delete();
-
-        $user = new User();
-        $user->username = 'user';
-        $user->password = Hash::make('user');
-        $user->role_id = 2;
+        $user->username = 'superuser';
+        $user->password = Hash::make('superuser');
+        $user->role = 'superuser';
         $user->save();
     }
 }

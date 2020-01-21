@@ -49,6 +49,7 @@ class UserController extends Controller
         $user = new User();
         $user->username = $request['username'];
         $user->password = Hash::make($request['password']);
+        $user->role = $request->role;
         $user->save();
 
         return response()->json([

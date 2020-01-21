@@ -3,18 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Role;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt', ['except' => ['login']]);
+        $this->middleware('role:roles');
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+
+        return response()->json($roles, 200);
     }
 
     /**
@@ -30,12 +40,25 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:users'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $errors], 422);
+        }
+
+        $role = new Role();
+        $role->name = $request->name;
+        $role->permissions = $request->permissions;
+        $role->save();
+
+        return response()->json(['message' => 'Role created'], 201);
     }
 
     /**
@@ -63,7 +86,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @param \App\Role $role
      * @return \Illuminate\Http\Response
      */

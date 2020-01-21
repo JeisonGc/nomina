@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Role;
 use Closure;
+use App\Role;
 use Illuminate\Http\Request;
 
 class CheckPermissions
@@ -17,14 +17,15 @@ class CheckPermissions
      */
     public function handle($request, Closure $next, $route)
     {
-        if (!auth()->user()) {
-            return response()->json(['message' => 'no activado'], 403);
-        }
-        $role = Role::where('id', '=', $request->user()->role_id)->first();
-        $permissions = $role->permissions;
+        if ($request->user()->role != 'superuser') {
+            $role = Role::where('name', '=', $request->user()->role)->first();
+            $permissions = $role->permissions;
 
-        if (in_array($route, $permissions)) {
-            return response()->json(['message' => 'unauthorized'], 403);
+            $permission = in_array($route, array_column($permissions, 'slug'));
+
+            if (!$permission) {
+                return response()->json(['message' => 'unauthorized'], 403);
+            }
         }
 
         return $next($request);
