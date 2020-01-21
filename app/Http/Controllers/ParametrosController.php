@@ -54,11 +54,13 @@ class ParametrosController extends BaseController
         $parametros->daytime_overtime = $request['sunday_overtime'];
         $parametros->sunday_night_overtime = $request['sunday_night_overtime'];
         $parametros->night_surcharge = $request['night_surcharge'];
+        $parametros->apply_parafiscals = $request['apply_parafiscals'];
+        $parametros->parafiscal_amount = $request['parafiscal_amount'];
         
         $aux_contratos = $request->get('contracts');
         //print_r($aux_contratos); die;
-        $parametros->contract = array();
-        $parametros->contract = array_merge($parametros->contract, [$aux_contratos]);
+        $parametros->contracts = array();
+        $parametros->contracts = array_merge($parametros->contracts, [$aux_contratos]);
         
 
         $aux_solidarity_fund = $request->get('solidarity_fund');
