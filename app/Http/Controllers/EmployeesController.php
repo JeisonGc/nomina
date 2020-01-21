@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Employees;
+use App\Employee;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,17 +13,19 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeesController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
 
-    public function add(Request  $request)
+    public function store(Request  $request)
     {      
-       
-        $employee = new Employees(); 
-        $employee = Employees::create($request['data']);       
-        return $employee;
+      
+
+        $input = $request->all();
+        $employee = Employee::create($input);
+        
 
         if($employee){
         return response()->json([
-            'employee' => $employee,
+            $employee,
             'message' => 'employee created succesfuly'
         ], 201);
       
@@ -33,38 +35,41 @@ class EmployeesController extends Controller
 
 
 
-    public function getOne($document){
+   /*  public function getOne($document){
 
-        $employee = Employees::where('document', '=',(int) $document)->get();
+        $employee = Employee::where('document', '=',(int) $document)->get();
 
         if($employee){
 
             return response()->json([
-                'employee' => $employee,
+                 $employee,
                 'message' => 'employee exist'
             ], 201);
 
         }else{
             return response()->json([
-                'employee' => $employee,
+                $employee,
                 'message' => 'employee does not exist'
             ], 404);
         }      
 
-    }
-    public function getAll(){
+    } */
 
-        $employee = new Employees(); 
-        $employee = Employees::all();
+
+
+    public function show(){
+
+        $employee = new Employee(); 
+        $employee = Employee::all();
 
         if (!$employee) {
             return response()->json([
-                'employe' => $employee,
+                $employee,
                 'message' => 'no employees to show'
             ], 404);
         }else{
             return response()->json([
-                'employe' => $employee,
+                $employee,
                 'message' => 'successful listing'
             ], 201);
         }      
@@ -72,23 +77,26 @@ class EmployeesController extends Controller
     }
 
 
-    public function update($document,Request  $request){ 
+    public function update($documentNumber,Request  $request){ 
         
-        $employee = new Employees(); 
-        $employee =Employees::where('document',(int)$document)->update($request['data']); 
+        $employee = new Employee(); 
+        $employee =Employee::where('documentNumber',(string)$documentNumber)
+        ->update($request); 
        
 
         if (!$employee) {
             return response()->json([
-                'message' => 'the employee does not exist',
-                'employe' => $employee
+                $employee,
+                'message' => 'the employee does not exist'
+               
             ], 404);
            
         }else {          
             
             return response()->json([
-                'message' => 'successfully updated',
-                'employe' => $employee
+                $employee,
+                'message' => 'successfully updated'
+                
             ]);            
             
         }      
@@ -96,21 +104,23 @@ class EmployeesController extends Controller
     }
 
 
-    public function destroy($document){
+    public function destroy($documentNumber){
         
-        $employee =Employees::where('document',(int)$document)->update(['status' => 2]);              
+        $employee =Employee::where('documentNumber',(string)$documentNumber)
+        ->update(['status' => true]);
+                    
                 
         if (!$employee) {
             return response()->json([
                 'message' => 'the employee does not exist',
-                'employe' => $employee
+                $employee
             ], 404);
            
         }else {          
             
             return response()->json([
                 'message' => 'successfully updated',
-                'employe' => $employee
+                $employee
             ]);
                         
         }
