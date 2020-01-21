@@ -15,61 +15,42 @@ class EmployeesController extends Controller
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
 
-    public function store(Request  $request)
-    {      
+    public function store(Request  $request){      
       
-
-        $input = $request->all();
-        $employee = Employee::create($input);
-        
-
+        $input = $request->all();        
+        if ($input) {           
+        $employee = Employee::create($input);        
         if($employee){
         return response()->json([
-            $employee,
+            'data' => $employee,
             'message' => 'employee created succesfuly'
         ], 201);
-      
         }
+
+        }else {
+
+        return response()->json([            
+            'message' => 'enter data'
+        ]);
+
+
+       }
         
-    }
-
-
-
-   /*  public function getOne($document){
-
-        $employee = Employee::where('document', '=',(int) $document)->get();
-
-        if($employee){
-
-            return response()->json([
-                 $employee,
-                'message' => 'employee exist'
-            ], 201);
-
-        }else{
-            return response()->json([
-                $employee,
-                'message' => 'employee does not exist'
-            ], 404);
-        }      
-
-    } */
-
+    }   
 
 
     public function show(){
 
-        $employee = new Employee(); 
+       
         $employee = Employee::all();
-
         if (!$employee) {
             return response()->json([
-                $employee,
+                'data' => $employee,
                 'message' => 'no employees to show'
             ], 404);
         }else{
             return response()->json([
-                $employee,
+                'data' => $employee,
                 'message' => 'successful listing'
             ], 201);
         }      
@@ -79,14 +60,48 @@ class EmployeesController extends Controller
 
     public function update($documentNumber,Request  $request){ 
         
-        $employee = new Employee(); 
-        $employee =Employee::where('documentNumber',(string)$documentNumber)
-        ->update($request); 
-       
+        $input = $request->all();
+        if ($input) {         
+        $employee =Employee::where('documentNumber',(string)$documentNumber)->first(); 
+        $employee->fill($request->all());
+        $employee->save();
 
         if (!$employee) {
             return response()->json([
-                $employee,
+                'data' => $employee,
+                'message' => 'the employee does not exist'
+               
+            ], 404);
+           
+        }else {           
+            return response()->json([
+                'data' => $employee,
+                'message' => 'employee successfully updated'
+                
+            ]);             
+        }  
+        } else {
+
+        return response()->json([            
+            'message' => 'enter data'
+        ]);
+
+
+        }
+        
+    }
+
+
+    public function destroy($documentNumber){
+
+        if ($documentNumber) {           
+        $employee =Employee::where('documentNumber',(string)$documentNumber)
+        ->update(['status' => false]);
+                    
+                
+        if (!$employee) {
+            return response()->json([
+                'data' => $employee,
                 'message' => 'the employee does not exist'
                
             ], 404);
@@ -94,36 +109,20 @@ class EmployeesController extends Controller
         }else {          
             
             return response()->json([
-                $employee,
+                'data' => $employee,
                 'message' => 'successfully updated'
-                
-            ]);            
-            
-        }      
-        
-    }
-
-
-    public function destroy($documentNumber){
-        
-        $employee =Employee::where('documentNumber',(string)$documentNumber)
-        ->update(['status' => true]);
-                    
-                
-        if (!$employee) {
-            return response()->json([
-                'message' => 'the employee does not exist',
-                $employee
-            ], 404);
-           
-        }else {          
-            
-            return response()->json([
-                'message' => 'successfully updated',
-                $employee
+               
             ]);
                         
         }
+        }else {
+
+        return response()->json([            
+            'message' => 'enter data'
+        ]);
+
+
+    }
                       
     }
 

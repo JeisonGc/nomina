@@ -23,3 +23,5 @@ Route::get('show', 'EmployeesController@show')->name('show');
 Route::put('update/{id}', 'EmployeesController@update')->name('update');
 Route::delete('destroy/{id}', 'EmployeesController@destroy')->name('destroy');
 
+Route::resource('Employess', 'EmployessController');
+
