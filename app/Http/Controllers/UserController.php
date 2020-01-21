@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('jwt', ['except' => ['login']]);
+        $this->middleware('role:users');
     }
 
     /**
@@ -38,21 +38,20 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|unique:users|email',
-            'password' => 'required|min:6',
+            'username' => 'required|unique:users',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $user = new User();
-        $user->email = $request['email'];
-        $user->password = Hash::make($request['password']);
-        $user->save();
+        $request['password'] = Hash::make($request['password']);
+
+        $user = User::create($request->all());
 
         return response()->json([
-            'user' => $user,
+            'data' => $user,
             'message' => 'resource created'
         ], 201);
     }
@@ -88,7 +87,7 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
-        $user->email = $request['email'];
+        $user->username = $request['username'];
         //$user->password = Hash::make($request['password']);
         $user->save();
 

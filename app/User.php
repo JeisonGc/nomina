@@ -16,6 +16,13 @@ class User extends Authenticatable implements JWTSubject
     protected $collection = 'users';
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['username', 'password', 'role'];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
