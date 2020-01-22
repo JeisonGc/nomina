@@ -34,4 +34,5 @@ Route::group([
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');
     Route::resource('employees', 'EmployeesController');
+    Route::resource('type-contracts', 'TypeContractController');
 });
