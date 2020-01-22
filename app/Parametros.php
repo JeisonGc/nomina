@@ -13,8 +13,8 @@ class Parametros extends Eloquent
 
     public function typeContracts()
     {
-        return $this->hasMany('App\TypeContract');
-        //return $this->embedsMany('TypeContract');
+        //return $this->hasMany('App\TypeContract');
+        return $this->embedsMany('App\TypeContract');
     }
     /*
     protected $casts = [
