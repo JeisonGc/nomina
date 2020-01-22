@@ -32,4 +32,5 @@ Route::group([
     Route::resource('solidarity-fund', 'SolidarityFundController');
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');
+    Route::resource('type-contracts', 'TypeContractController');
 });
