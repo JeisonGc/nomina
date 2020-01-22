@@ -22,7 +22,6 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
-
 Route::group([
     'middleware' => ['api']
 ], function ($router) {
@@ -32,4 +31,5 @@ Route::group([
     Route::resource('solidarity-fund', 'SolidarityFundController');
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');
+    Route::resource('employees', 'EmployeesController');
 });
