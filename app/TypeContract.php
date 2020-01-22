@@ -29,5 +29,10 @@ class TypeContract extends Eloquent
           'compensation_box',
           'apply_overtime'
     );
+
+    public function parameter()
+    {
+        return $this->belongsTo('Parametros');
+    }
 }
 

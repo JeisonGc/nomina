@@ -3,27 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\TypeContract;
+use App\Parametros;
 use Illuminate\Http\Request;
 
 class TypeContractController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $typeContract = TypeContract::all();
+        $year = $request->year;
+        $p = Parametros::where('year', $year+0)->first();
+
+        $typeContract = $p->typeContracts;
 
         return response()->json([
             $typeContract
+            
         ]);
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
+        
+        //$year = 2020;
+        //$p = Parametros::where('year', $year)->first();
 
-        $typeContract = typeContract::create($input);
+       // $typeContract = new TypeContract($input);
+
+        //$comment = $p->typeContracts()->create($input);
+
+        //$p->typeContracts()->save($typeContract);   
 
         return response()->json([
-            $typeContract
+            $year
         ]);
     }
 
@@ -31,13 +43,13 @@ class TypeContractController extends Controller
     public function show($id)
     {
         $typeContract = TypeContract::find($id);
-  
+
         if (is_null($typeContract)) {
             return $this->typeContract('typeContract not found.');
         }
    
         return response()->json([
-            $typeContract
+            'contrato' => $typeContract
         ]);
     }
 
