@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
@@ -22,7 +23,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::withTrashed()->get();
 
         return response()->json($roles, 200);
     }
@@ -37,11 +38,12 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:users'
+            'name' => 'required|unique:roles',
+            'permissions.*.slug' => 'exists:permissions,slug',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $errors], 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
         $role = Role::create($request->all());
@@ -55,24 +57,26 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Role $role
-     * @return \Illuminate\Http\Response
+     * @param $name
+     * @return JsonResponse
      */
-    public function show(Role $role)
+    public function show($name)
     {
-        //
+        $role = Role::where('name', $name)->firts();
+
+        return response()->json($role, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param $id
+     * @param $name
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $name)
     {
-        $role = Role::find($id);
+        $role = Role::where('name', $name)->firts();
         $role->fill($request->all());
         $role->save();
 
@@ -85,16 +89,22 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
+     * @param $name
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($name)
     {
-        $role = Role::find($id);
-        $role->delete();
+        $role = Role::where('name', $name)->first();
 
+        if (!$role) {
+            return response()->json([
+                'message' => 'the resource does not exist'
+            ], 404);
+        }
+
+        $role->delete();
         return response()->json([
-            'message' => 'resource deleted'
+            'message' => 'resource removed'
         ], 201);
     }
 }

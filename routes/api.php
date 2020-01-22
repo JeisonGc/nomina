@@ -22,12 +22,14 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
+
 Route::group([
     'middleware' => ['api']
 ], function ($router) {
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
-    Route::resource('parameters', 'ParametrosController');
+    Route::resource('permissions', 'PermissionController');
+    Route::resource('parameters', 'ParametersController');
     Route::resource('solidarity-fund', 'SolidarityFundController');
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');

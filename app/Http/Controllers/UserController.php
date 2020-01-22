@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::withTrashed()->get();
 
         return response()->json($users, 200);
     }
@@ -66,7 +66,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        return response()->json($user, 201);
+        return response()->json([
+            'data' => $user,
+            'message' => 'resource found'
+        ], 201);
     }
 
     /**
@@ -87,7 +90,7 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
-        $user->username = $request['username'];
+        $user->fill($request->all());
         //$user->password = Hash::make($request['password']);
         $user->save();
 
