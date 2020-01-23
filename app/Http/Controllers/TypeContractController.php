@@ -47,7 +47,7 @@ class TypeContractController extends Controller
         }
    
         return response()->json([
-            'contrato' => $typeContract
+            'contract' => $typeContract
         ]);
     }
 
@@ -80,7 +80,6 @@ class TypeContractController extends Controller
             $typeContract = $parameter->typeContracts()->find($id);
             $typeContract->delete();
     
-                                        
             if ($typeContract) {            
                 return response()->json([
                     'data' => $typeContract,
@@ -88,6 +87,6 @@ class TypeContractController extends Controller
                 ]);
                             
             }
-            }
+        }
     }
 }

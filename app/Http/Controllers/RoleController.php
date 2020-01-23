@@ -39,7 +39,7 @@ class RoleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:roles',
-            'permissions.*.slug' => 'exists:permissions,slug',
+            // 'permissions.*.slug' => 'exists:permissions,slug',
         ]);
 
         if ($validator->fails()) {
@@ -62,7 +62,7 @@ class RoleController extends Controller
      */
     public function show($name)
     {
-        $role = Role::where('name', $name)->firts();
+        $role = Role::where('name', $name)->first();
 
         return response()->json($role, 200);
     }
@@ -76,7 +76,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $name)
     {
-        $role = Role::where('name', $name)->firts();
+        $role = Role::where('name', $name)->first();
         $role->fill($request->all());
         $role->save();
 

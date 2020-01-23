@@ -9,7 +9,7 @@ class SolidarityFund extends Eloquent
 {
     use HybridRelations;
     protected $connection = 'mongodb';
-    protected $collection = 'solidarityFunds';
+    protected $collection = 'solidarity-funds';
 
     protected $fillable = 
     array('start_ms',
