@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -90,12 +91,17 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
+        $currentPassword = $user->password;
+
+        if (!Hash::check($request['password'], $currentPassword)) {
+            $request['password'] = Hash::make($request['password']);
+        }
+
         $user->fill($request->all());
-        //$user->password = Hash::make($request['password']);
         $user->save();
 
         return response()->json([
-            'user' => $user,
+            'user' => $currentPassword,
             'message' => 'resource updated'
         ], 201);
     }
