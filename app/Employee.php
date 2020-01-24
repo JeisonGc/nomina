@@ -14,7 +14,12 @@ class Employee extends Eloquent
     protected $collection = 'employees';    
     protected $dates = ['deleted_at'];
     protected $fillable = ['first_Name','last_Name','document_Type','document_Number','email','cellphone',
-    'date_born','current_contract','contracts','social_security','payment_method','learns','transport_Aid'];
+    'date_born','current_contract','contracts','social_security','payment_method','loans','transport_Aid'];
+
+    public function loans()
+    {
+        return $this->hasMany('App\Loan');
+    }
 
 }
 

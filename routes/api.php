@@ -35,4 +35,5 @@ Route::group([
     Route::resource('novelties', 'NoveltiesController');
     Route::resource('employees', 'EmployeesController');
     Route::resource('type-contracts', 'TypeContractController');
+    Route::resource('loans', 'LoanController');
 });
