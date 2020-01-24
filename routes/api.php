@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,6 +34,8 @@ Route::group([
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
+    Route::resource('contracts', 'ContractController');
+    Route::resource('settlements', 'SettlementController');
     Route::resource('parameters', 'ParametersController');
     Route::resource('settlements', 'SettlementsController');
     Route::resource('solidarity-fund', 'SolidarityFundController');
