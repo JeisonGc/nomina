@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\TypeContract;
-use App\Parametros;
+use App\Parameter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TypeContractController extends Controller
 {
@@ -13,7 +14,7 @@ class TypeContractController extends Controller
         //Ya que los tipos de contratos dependen del parametro, se necesita el año para saber de cual
         // documento de parametro se listaran los contratos.
         $year = $request->year;
-        $parameter = Parametros::where('year', $year+0)->first();
+        $parameter = Parameter::where('year', $year+0)->first();
 
         $typeContract = $parameter->typeContracts;
 
@@ -26,7 +27,25 @@ class TypeContractController extends Controller
     {
         $input = $request->all();
         $year = $request->year;
-        $parameter = Parametros::where('year', $year+0)->first();
+        $parameter = Parameter::where('year', $year+0)->first();
+        $descriptions = array_column(json_decode($parameter->typeContracts), 'description');
+        
+        $validator = Validator::make($request->all(), [
+            'description' => [
+                'required',
+                function ($attribute, $value, $fail)use ($request, $descriptions) {
+                    $descriptionExist =  in_array($value, $descriptions);
+                    if ($descriptionExist) {
+                        $fail($attribute.' exist.');
+                    }
+                },
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        
         $typeContract = $parameter->typeContracts()->create($input);
 
         return response()->json([
@@ -38,7 +57,7 @@ class TypeContractController extends Controller
     public function show(Request $request, $id)
     {
         $year = $request->year;
-        $parameter = Parametros::where('year', $year+0)->first();
+        $parameter = Parameter::where('year', $year+0)->first();
 
         $typeContract = $parameter->typeContracts()->find($id);
 
@@ -47,7 +66,7 @@ class TypeContractController extends Controller
         }
    
         return response()->json([
-            'contrato' => $typeContract
+            'contract' => $typeContract
         ]);
     }
 
@@ -56,9 +75,26 @@ class TypeContractController extends Controller
     {
         $input = $request->all();
         $year = $request->year;
-        $parameter = Parametros::where('year', $year+0)->first();
-
+        $parameter = Parameter::where('year', $year+0)->first();
         $typeContract = $parameter->typeContracts()->find($id);
+        $descriptions = array_column(json_decode($parameter->typeContracts), 'description');
+        $descriptions = array_diff($descriptions, array($typeContract->description));
+        
+        $validator = Validator::make($request->all(), [
+            'description' => [
+                'required',
+                function ($attribute, $value, $fail)use ($request, $descriptions) {
+                    $descriptionExist =  in_array($value, $descriptions);
+                    if ($descriptionExist) {
+                        $fail($attribute.' exist.');
+                    }
+                },
+            ],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
 
         $typeContract->fill($input);
         $typeContract->save();
@@ -75,12 +111,11 @@ class TypeContractController extends Controller
     {
         if ($id) {           
             $year = $request->year;
-            $parameter = Parametros::where('year', $year+0)->first();
+            $parameter = Parameter::where('year', $year+0)->first();
 
             $typeContract = $parameter->typeContracts()->find($id);
             $typeContract->delete();
     
-                                        
             if ($typeContract) {            
                 return response()->json([
                     'data' => $typeContract,
@@ -88,6 +123,6 @@ class TypeContractController extends Controller
                 ]);
                             
             }
-            }
+        }
     }
 }

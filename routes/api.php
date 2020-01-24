@@ -30,6 +30,7 @@ Route::group([
     Route::resource('roles', 'RoleController');
     Route::resource('permissions', 'PermissionController');
     Route::resource('parameters', 'ParametersController');
+    Route::resource('settlements', 'SettlementsController');
     Route::resource('solidarity-fund', 'SolidarityFundController');
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');

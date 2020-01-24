@@ -9,31 +9,38 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class EmployeesController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+    public function store(Request  $request){  
+        $validator = Validator::make($request->all(), [
+            'first_Name'         => 'required|unique:employees',
+            'email'              => 'required|unique:employees',
+            'document_number'    => 'required|unique:employees'
+        ]);
 
-    public function store(Request  $request){      
-      
-        $input = $request->all();        
-        if ($input) {           
-        $employee = Employee::create($input);        
-        if($employee){
-        return response()->json([
-            'data' => $employee,
-            'message' => 'employee created succesfuly'
-        ], 201);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }    
+
+        $input = $request->all();
+
+        if ($input){           
+            $employee = Employee::create($input);        
+            if($employee){
+                return response()->json([
+                    'data' => $employee,
+                    'message' => 'employee created succesfuly'
+                ], 201);
+            }
         }
-        }
-        
     }   
 
-
     public function index(){
-       
         $employee = Employee::withTrashed()->get();
+
         if ($employee) {           
             return response()->json([
                 'data' => $employee,
@@ -42,59 +49,59 @@ class EmployeesController extends Controller
         }      
     }
 
-
     public function show($documentNumber){ 
-        
-       
         if ($documentNumber) {         
-        $employee =Employee::where('document_Number',(string)$documentNumber)->get(); 
-       
-        if ($employee) {                      
-            return response()->json([
-                'data' => $employee,
-                'message' => 'employee exists'
-                
-            ]);             
-        }  
+            $employee =Employee::where('document_number',(string)$documentNumber)->get(); 
+            
+            if ($employee) {                      
+                return response()->json([
+                    'data' => $employee,
+                    'message' => 'employee exists'
+                    
+                ]);             
+            }  
         } 
-        
     }
 
+    public function update($documentNumber,Request  $request){
+        $validator = Validator::make($request->all(), [
+            'first_Name'        => [Rule::unique('employees')->ignore($documentNumber, 'document_number')],
+            'email'             => [Rule::unique('employees')->ignore($documentNumber, 'document_number')],
+            'document_number'   => [Rule::unique('employees')->ignore($documentNumber, 'document_number')]
+        ]);
 
-    public function update($documentNumber,Request  $request){ 
-        
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
         $input = $request->all();
-        if ($input) {         
-        $employee =Employee::where('document_Number',(string)$documentNumber)->first(); 
-        $employee->fill($request->all());
-        $employee->save();
 
-        if ($employee) {                      
-            return response()->json([
-                'data' => $employee,
-                'message' => 'employee successfully updated'
-                
-            ]);             
-        }  
+        if ($input) {         
+            $employee =Employee::where('document_number',(string)$documentNumber)->first(); 
+            $employee->fill($request->all());
+            $employee->save();
+
+            if ($employee) {                      
+                return response()->json([
+                    'data' => $employee,
+                    'message' => 'employee successfully updated'
+                    
+                ]);             
+            }  
         }         
     }
 
-
     public function destroy($documentNumber){
-
         if ($documentNumber) {           
-        $employee =Employee::where('document_Number',(string)$documentNumber)->first();
-        $employee->delete();       
-                                    
-        if ($employee) {            
-            return response()->json([
-                'data' => $employee,
-                'message' => 'successfully eliminated'               
-            ]);
-                        
+            $employee =Employee::where('document_number',(string)$documentNumber)->first();
+            $employee->delete(); 
+                  
+            if ($employee) {            
+                return response()->json([
+                    'data' => $employee,
+                    'message' => 'successfully eliminated'               
+                ]);
+            }
         }
-        }
-                      
     }
-
 }
