@@ -7,7 +7,6 @@ use App\Employee;
 use App\Settlement;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Resources\SettlementCollection;
 
 class ContractController extends Controller
 {
@@ -20,11 +19,16 @@ class ContractController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index()
     {
-        //
+        $contracts = Contract::withTrashed()->get();
+
+        return response()->json([
+            'contracts' => $contracts,
+            'message' => 'resources'
+        ], 201);
     }
 
     /**
@@ -35,37 +39,52 @@ class ContractController extends Controller
      */
     public function store(Request $request)
     {
-        $settlement = $this->createNewSettlement($request);
+        $employee = Employee::where('document_Number', $request->document_number)->first();
 
+        if (!$employee) {
+            return response()->json([
+                'message' => 'employee not found'
+            ], 201);
+        }
+
+        //create new settlement
+        $settlement = Settlement::create(['base_salary' => $request->salary]);
+        //assign new settlement to the request
         $request['current_settlement'] = $settlement->id;
         $request['settlements'] = [$settlement->id];
 
+        //create new contract
         $contract = Contract::create($request->all());
 
-        $employee = $this->assignContract($contract, $request->document_number);
+        //assign new contract to the employee
+        $employee->current_contract = $contract->id;
+        $employee->push('contracts', $contract->id);
 
         return response()->json([
-            'contract' => $employee,
-            'message' => 'resource updated'
+            'contract' => $contract,
+            'message' => 'resource created'
         ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Contract $contract
-     * @return \Illuminate\Http\Response
+     * @param Contract $contract
+     * @return JsonResponse
      */
     public function show(Contract $contract)
     {
-        //
+        return response()->json([
+            'contracts' => $contract,
+            'message' => 'resources'
+        ], 201);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param \App\Contract $contract
+     * @param Contract $contract
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Contract $contract)
@@ -76,42 +95,11 @@ class ContractController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Contract $contract
+     * @param Contract $contract
      * @return \Illuminate\Http\Response
      */
     public function destroy(Contract $contract)
     {
         //
-    }
-
-    /**
-     * Return a newly created settlement in storage.
-     *
-     * @return Settlement
-     */
-    public function createNewSettlement($data)
-    {
-        $settlement = new Settlement();
-        $valuesInitialSettlement = SettlementCollection::getInitial($settlement);
-
-        $valuesInitialSettlement->save();
-
-        return $valuesInitialSettlement;
-    }
-
-    public function assignContract($contract, $employeeId)
-    {
-        $employee = Employee::find($employeeId);
-
-        if (!$employee) {
-            return response()->json([
-                'message' => 'resource not found'
-            ], 404);
-        }
-
-        $employee->current_contract = $contract->id;
-        $employee->push('contracts', $contract->id);
-
-        return $employee;
     }
 }
