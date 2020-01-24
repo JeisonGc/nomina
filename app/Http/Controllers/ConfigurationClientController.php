@@ -66,7 +66,7 @@ class ConfigurationClientController extends BaseController
         if($client){
         return response()->json([
             'data' => $client,
-            'connection active'=> $cli->getConnection()->getName(),
+           // 'connection active'=> $cli->getConnection()->getName(),
             'message' => 'client created succesfuly'
         ], 201);
         }
