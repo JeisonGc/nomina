@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ParametersController extends BaseController
 {
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
-
-
     /**
      * Display a listing of the resource.
      *

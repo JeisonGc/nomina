@@ -14,7 +14,6 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt', ['except' => ['login']]);
         $this->middleware('role:users');
     }
 

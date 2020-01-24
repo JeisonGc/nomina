@@ -11,13 +11,6 @@ use Illuminate\Http\Request;
 
 class RiskClassController extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
-
     public function store(Request $request)
     {
         $input = $request->all();

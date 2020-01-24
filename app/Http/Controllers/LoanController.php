@@ -14,12 +14,6 @@ use Illuminate\Support\Facades\Validator;
 
 class LoanController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
-
     public function index(Request $request)
     {
         //Trae todo los loans sin importar el empleado

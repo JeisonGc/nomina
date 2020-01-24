@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Validator;
 
 class NoveltiesController extends BaseController
 {
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
-
     public function index(Request $request)
     {
         $year = $request->year;

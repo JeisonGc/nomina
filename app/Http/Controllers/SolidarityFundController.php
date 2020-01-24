@@ -12,13 +12,6 @@ use Illuminate\Http\Request;
 
 class SolidarityFundController extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
-
     public function index(Request $request)
     {
         $year = $request->year;

@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SettlementsController extends Controller
 {
-    
-    public function __construct()
-    {
-        $this->middleware('jwt', ['except' => ['login']]);
-    }
     /**
      * Display a listing of the resource.
      *
