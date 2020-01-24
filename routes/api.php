@@ -12,6 +12,13 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group([
+    'middleware' => ['api','jwt'],
+    'prefix' => 'config'
+], function ($router) {
+    Route::resource('clients', 'ConfigurationClientController');
+    Route::get('client', 'ConfigurationClientController@client');
+});
 
 Route::group([
     'middleware' => 'api',
