@@ -4,19 +4,24 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Noveltie extends Eloquent
 {
-    use HybridRelations;
+    use SoftDeletes;
     protected $connection = 'mongodb';
     protected $collection = 'novelties';
 
     protected $fillable = 
-    array('id',
-          'name',
-          'start_value',
-          'type',
-          'formula',
-          'status'
-    );
+    [   'id',
+        'name',
+        'start_value',
+        'type',
+        'formula'
+    ];
+
+    public function parameter()
+    {
+        return $this->belongsTo('parameters');
+    }
 }

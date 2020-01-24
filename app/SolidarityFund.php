@@ -4,17 +4,23 @@ namespace App;
 
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Jenssegers\Mongodb\Eloquent\HybridRelations;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class SolidarityFund extends Eloquent
 {
-    use HybridRelations;
+    use SoftDeletes;
     protected $connection = 'mongodb';
-    protected $collection = 'solidarityFunds';
+    protected $collection = 'solidarity-funds';
 
     protected $fillable = 
-    array('start_ms',
-          'final_ms',
-          'percentage',
-          'status'
-    );
+    [
+        'start_ms',
+        'final_ms',
+        'percentage'
+    ];
+
+    public function parameter()
+    {
+        return $this->belongsTo('parameters');
+    }
 }

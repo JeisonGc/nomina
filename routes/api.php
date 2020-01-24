@@ -10,6 +10,13 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::group([
+    'middleware' => ['api','jwt'],
+    'prefix' => 'config'
+], function ($router) {
+    Route::resource('clients', 'ConfigurationClientController');
+    Route::get('client', 'ConfigurationClientController@client');
+});
 
 Route::group([
     'middleware' => 'api',
@@ -30,9 +37,11 @@ Route::group([
     Route::resource('contracts', 'ContractController');
     Route::resource('settlements', 'SettlementController');
     Route::resource('parameters', 'ParametersController');
+    Route::resource('settlements', 'SettlementsController');
     Route::resource('solidarity-fund', 'SolidarityFundController');
     Route::resource('risk-class', 'RiskClassController');
     Route::resource('novelties', 'NoveltiesController');
     Route::resource('employees', 'EmployeesController');
     Route::resource('type-contracts', 'TypeContractController');
+    Route::resource('loans', 'LoanController');
 });

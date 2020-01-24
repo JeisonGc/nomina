@@ -7,11 +7,12 @@ use Jenssegers\Mongodb\Auth\User as Authenticatable;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use App\ConfigurationClient;
+
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, SoftDeletes;
 
-    protected $connection = 'mongodb';
     protected $collection = 'users';
 
     /**
@@ -19,7 +20,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $fillable = ['username', 'password', 'role'];
+    protected $fillable = ['username', 'password', 'role','client'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -46,6 +47,15 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims()
     {
-        return [];
+        return ['client'=> $this->client];
+    }
+
+    /**
+     * Return connection name to bd of user.
+     *
+     * @return connection name
+     */
+    public function clientBD(){
+        return ConfigurationClient::select('connection')->find($this->client);
     }
 }
