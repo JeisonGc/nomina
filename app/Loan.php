@@ -10,7 +10,6 @@ class Loan extends Eloquent
 {
     use SoftDeletes;
     use HybridRelations;
-    protected $connection = 'mongodb';
     protected $collection = 'loans';
 
     protected $fillable = 
