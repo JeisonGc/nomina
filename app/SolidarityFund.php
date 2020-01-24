@@ -9,8 +9,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class SolidarityFund extends Eloquent
 {
     use SoftDeletes;
-    protected $connection = 'mongodb';
-    protected $collection = 'solidarity-funds';
+    protected $collection = 'solidarity_funds';
 
     protected $fillable = 
     [

@@ -9,7 +9,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class Employee extends Eloquent
 {
     use SoftDeletes;
-    protected $connection = 'mongodb';
     protected $collection = 'employees';    
 
     protected $fillable = ['first_Name','last_Name','document_type','document_number','email','cellphone',

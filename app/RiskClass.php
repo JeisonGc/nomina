@@ -7,9 +7,7 @@ use Jenssegers\Mongodb\Eloquent\HybridRelations;
 
 class RiskClass extends Eloquent
 {
-    use HybridRelations;
-    protected $connection = 'mongodb';
-    protected $collection = 'risk-classes';
+    protected $collection = 'risk_classes';
 
     protected $fillable = 
     array('class',

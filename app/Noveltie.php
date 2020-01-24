@@ -9,7 +9,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class Noveltie extends Eloquent
 {
     use SoftDeletes;
-    protected $connection = 'mongodb';
     protected $collection = 'novelties';
 
     protected $fillable = 

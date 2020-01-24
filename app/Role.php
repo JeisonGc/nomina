@@ -9,7 +9,6 @@ class Role extends Eloquent
 {
     use SoftDeletes;
 
-    public $connection = 'mongodb';
     protected $collection = 'roles';
 
     /**

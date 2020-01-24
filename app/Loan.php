@@ -9,7 +9,6 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class Loan extends Eloquent
 {
     use SoftDeletes;
-    use HybridRelations;
     protected $collection = 'loans';
 
     protected $fillable = 

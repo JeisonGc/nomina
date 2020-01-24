@@ -9,8 +9,7 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 class TypeContract extends Eloquent
 {
     use SoftDeletes;
-    protected $connection = 'mongodb';
-    protected $collection = 'type-contracts';
+    protected $collection = 'type_contracts';
 
     protected $fillable = 
     [

@@ -9,7 +9,6 @@ class Permission extends Eloquent
 {
     use SoftDeletes;
 
-    public $connection = 'mongodb';
     protected $collection = 'permissions';
 
     /**
