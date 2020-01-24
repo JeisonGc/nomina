@@ -30,9 +30,5 @@ class TypeContract extends Eloquent
         'apply_overtime'
     ];
 
-    public function parameter()
-    {
-        return $this->belongsTo('parameters');
-    }
 }
 

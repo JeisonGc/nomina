@@ -16,5 +16,10 @@ class Employee extends Eloquent
     'date_born','current_contract','contracts','social_security','payment_method','learns','transport_aid'];
 
     protected $dates = ['deleted_at'];
+
+    public function loans()
+    {
+        return $this->hasMany('App\Loan');
+    }
 }
 
