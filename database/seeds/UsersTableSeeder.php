@@ -16,10 +16,18 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $connection = new \App\ConfigurationClient();
+        $connection->name = 'Insoftar';
+        $connection->url_icon = "insoftar.png";
+        $connection->title = 'Insoftar';
+        $connection->connection = "insoftar";
+        $connection->email = "test@gmail.com";
+        $connection->save();
+
         $user = new User();
         $user->username = 'insoftar';
         $user->password = Hash::make('insoftar');
-        $user->client = new ObjectID("5e2b0b7621024d0671197514");
+        $user->client = $connection->id;
         $user->role = 'superuser';
         $user->save();
     }
