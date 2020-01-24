@@ -18,4 +18,19 @@ class Parameter extends Eloquent
     {
         return $this->embedsMany('App\TypeContract');
     }
+
+    public function solidarity_fund()
+    {
+        return $this->embedsMany('App\SolidarityFund');
+    }
+
+    public function risk_class()
+    {
+        return $this->embedsMany('App\RiskClass');
+    }
+
+    public function novelties()
+    {
+        return $this->embedsMany('App\Noveltie');
+    }
 }
